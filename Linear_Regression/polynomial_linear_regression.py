@@ -17,8 +17,9 @@ X = np.array(X)
 Y = np.array(Y)
 
 # For multi-dimensional regression we have D equations and D unknowns. We want to isolate w to find the weights.
-# Our model still takes the form (Y_hat = wT * Xi) and our error function does not change.
-# Take derivative of error function and solving for w:
+# Our model still takes the form (Y_hat = wT X + b) and our error function does not change
+# (Only the expression for the prediction changes in the error function).
+# Take derivative of error function and solve for w:
 
 # w(XT X) = XT Y (this takes the form Ax = b, solving for w:
 # w = ((XT X)^-1) XT Y convert into Numpy methods:

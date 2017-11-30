@@ -36,7 +36,7 @@ b = (Y.mean() * X.dot(X) - X.mean() * X.dot(Y)) / denom
 
 Y_hat = a * X + b
 
-# Now plot everything:
+# Now we plot everything:
 plt.scatter(X, Y)
 plt.plot(X, Y_hat, color='black')
 plt.show()
