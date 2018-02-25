@@ -41,36 +41,38 @@ model.compile(loss='mean_squared_error',
 ws = []
 ws.append(model.layers[0].get_weights())
 ws.append(model.layers[1].get_weights())
-def collectWeights(batch, logs):
+
+
+def collect_weights(batch, logs):
     weights = model.layers[0].get_weights()
     ws.append(weights)
     weights = model.layers[1].get_weights()
     ws.append(weights)
 
+
 # Define a callback to pass to the trainer to run at the end of every epoch
-print_weights = LambdaCallback(on_epoch_end=collectWeights)
+print_weights = LambdaCallback(on_epoch_end=collect_weights)
 
 # Train the model.
-model.fit(input, output, epochs=3,callbacks = [print_weights])
+model.fit(input, output, epochs=3, callbacks=[print_weights])
 
 # Create a random test vector of features to see how well we predict, multiply it by 10
 # so it's out of the range of the input data. This ensures it's never been seen
 # during training.
 
-print ("-"*30)
-test_data = np.random.rand(1,num_features) * 10
-print ("    TEST: ", test_data[0])
+print("-"*30)
+test_data = np.random.rand(1, num_features) * 10
+print("    TEST: ", test_data[0])
 result = model.predict(np.asarray(test_data))
-print ("  RESULT: ", result[0])
-print ("EXPECTED: ", np.sum(test_data,axis=1)/2)
+print("  RESULT: ", result[0])
+print("EXPECTED: ", np.sum(test_data, axis=1)/2)
 
 
 # Print out all the weights we collected
 epoch_name = "initial"
 for i in range(0, len(ws), 2):
-    print ("Weights for Layer 0", epoch_name)
-    print (ws[i][0])
-    print ("Weights for Layer 1", epoch_name)
-    print (ws[i+1][0])
+    print("Weights for Layer 0", epoch_name)
+    print(ws[i][0])
+    print("Weights for Layer 1", epoch_name)
+    print(ws[i+1][0])
     epoch_name = "After epoch " + str(int(i/2 + 1))
-

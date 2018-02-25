@@ -2,12 +2,14 @@ import pandas as pd
 import numpy as np
 from datetime import datetime
 from keras import Sequential
-from keras.layers import Dense, LSTM, Dropout, Activation
+from keras.layers import Dense
 from keras import optimizers
+
 
 # Parse the time from a string so we can merge on dates.
 def parse(x):
     return datetime.strptime(x, '%m/%d/%Y')
+
 
 # Set the seed so that we have a reproducible output.
 np.random.seed(113017)
@@ -35,10 +37,10 @@ spxData["50smavol"] = spxData["Volume"].rolling(window=50).mean()
 spxData.dropna(inplace=True)
 
 # These are the columns we are interested in for training
-input_cols = ["Adj Close", "Volume", "200sma", "50sma", "50smavol" ]
+input_cols = ["Adj Close", "Volume", "200sma", "50sma", "50smavol"]
 
 # Now build the Training / Test data sets by splitting off this month.
-# The last 20 rows of the dataframe represent Nov, 2017. We'll use that to test with and the
+# The last 20 rows of the Data Frame represent Nov, 2017. We'll use that to test with and the
 # rest will be used for training
 spxTestData = spxData[-20:]
 spxData = spxData[0:-20]
@@ -54,7 +56,7 @@ test_output_data = np.asarray(spxTestData["nextDayGreen"])
 model = Sequential()
 model.add(Dense(units=20, input_shape=(len(input_cols),), kernel_initializer="uniform", activation="tanh"))
 # If we over fit, can regularize by dropping some samples
-#model.add(Dropout(0.1))
+# model.add(Dropout(0.1))
 model.add(Dense(units=300, kernel_initializer="uniform", activation="tanh"))
 model.add(Dense(units=1, kernel_initializer="uniform", activation="sigmoid"))
 
@@ -65,11 +67,10 @@ model.compile(loss='binary_crossentropy',
               metrics=['accuracy'])
 
 # Uncomment this to view the model summary
-#model.summary()
+# model.summary()
 
 # Train the model.
 model.fit(train_input_data_, train_output_data, epochs=5)
 
 results = model.evaluate(test_input_data, test_output_data)
-print ()
-print ("Model evaluation results (loss, acc): " + str(results))
+print("Model evaluation results (loss, acc): " + str(results))
